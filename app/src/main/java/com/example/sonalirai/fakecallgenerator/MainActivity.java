@@ -1,5 +1,9 @@
 package com.example.sonalirai.fakecallgenerator;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,9 +48,38 @@ public class MainActivity extends AppCompatActivity {
                 int radioSelected=radioGroup.getCheckedRadioButtonId();
                 int radioTimeSelected=getSelectedTime(radioSelected);
 
+                if(radioSelected==-1){
+                    Toast.makeText(MainActivity.this,"Default wait time is 60s",Toast.LENGTH_SHORT);
+                }
 
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.add(Calendar.SECOND, 10);
+                long calendarFakeTime=calendar.getTimeInMillis();
+                String fakeNameString=fakeName.getText().toString();
+                String fakeNumberString=fakeNumber.getText().toString();
+
+                if(fakeNameString.equals("")&&fakeNumberString.equals("")){
+                    Toast.makeText(MainActivity.this, "Must enter name and number", Toast.LENGTH_SHORT);
+                }
+
+                setUpAlarm(fakeNameString, fakeNumberString, calendarFakeTime);
             }
         });
+    }
+
+    private void setUpAlarm(String fakeNameString, String fakeNumberString, long calendarFakeTime) {
+        AlarmManager alarmManager= (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent=new Intent(this,FakeCallReciever.class);
+
+        intent.putExtra("Name", fakeNameString);
+        intent.putExtra("Number", fakeNumberString);
+
+        PendingIntent fakeIntent=PendingIntent.getBroadcast(MainActivity.this,0, intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendarFakeTime,fakeIntent);
+
+        Intent mainIntent= new Intent(this, MainActivity.class);
+        startActivity(mainIntent);
     }
 
     private int getSelectedTime(int radioSelected) {
@@ -54,4 +90,6 @@ public class MainActivity extends AppCompatActivity {
             return 30;
         else return 60;
     }
+
+
 }
