@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.sonalirai.fakecallgenerator.FakeRingingActivity">
+    tools:context="com.example.sonalirai.fakecallgenerator.FakeRingingActivity"
+    android:id="@+id/activity_fake_ringing">
 
     <TextView
         android:id="@+id/textView1"
@@ -59,7 +60,7 @@
         android:layout_marginBottom="26dp"
         android:layout_marginLeft="29dp"
         android:contentDescription="@null"
-        android:background="@drawable/acceptcall" />
+        android:background="@drawable/ic_launcher_background" />
 
     <Button
         android:id="@+id/rejectcall"
@@ -69,5 +70,5 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="32dp"
         android:contentDescription="@null"
-        android:background="@drawable/rejectcall" />
+        android:background="@drawable/ic_launcher_background" />
 </RelativeLayout>
